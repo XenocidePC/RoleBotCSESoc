@@ -12,7 +12,7 @@ ROLELOG_CHANNEL_ID = 0
 
 @client.event
 async def on_ready():
-    print('Logged on as {0}!'.format(client.user))
+    print("Logged on as {0}!".format(client.user))
 
 
 @client.event
@@ -45,7 +45,7 @@ async def setrole(ctx):
     global ROLE_CHANNEL_ID
     ROLE_CHANNEL_ID = ctx.channel.id
     await ctx.send(f"Set <#{ROLE_CHANNEL_ID}> as default role channel.")
-    print(f'Set {ROLE_CHANNEL_ID} as default role channel')
+    print(f"Set {ROLE_CHANNEL_ID} as default role channel")
 
 
 # Set role log channel.
@@ -55,7 +55,7 @@ async def setrolelog(ctx):
     global ROLELOG_CHANNEL_ID
     ROLELOG_CHANNEL_ID = ctx.channel.id
     await ctx.send(f"Set <#{ROLELOG_CHANNEL_ID}> as default role log channel.")
-    print(f'Set {ROLELOG_CHANNEL_ID} as default role log channel')
+    print(f"Set {ROLELOG_CHANNEL_ID} as default role log channel")
 
 
 # Give user a role.
@@ -72,17 +72,17 @@ async def give(ctx, *role_inputs):
             try:
                 role = get(ctx.guild.roles, name=role_input)
                 await user.add_roles(role)
-                await ctx.send(f'✅ Gave {role_input} to {user}')
-                await logchannel.send(f'✅ Gave {role_input} to {user}')
+                await ctx.send(f"✅ Gave {role_input} to {user}")
+                await logchannel.send(f"✅ Gave {role_input} to {user}")
             except:
-                await ctx.send(f'❌ Failed to give {role_input} to {user}. Please make sure your course code matches exactly e.g. `COMP1511` not `COMP 1511`')
-                await logchannel.send(f'❌ Failed to give {role_input} to {user}')
+                await ctx.send(f"❌ Failed to give {role_input} to {user}. Please make sure your course code matches exactly e.g. `COMP1511` not `COMP 1511`")
+                await logchannel.send(f"❌ Failed to give {role_input} to {user}")
                 success = False
         if success:
             await ctx.message.add_reaction("👍")
 
 
-# Take away user's role.
+# Take away user"s role.
 @client.command()
 async def remove(ctx, *role_inputs):
     global ROLELOG_CHANNEL_ID
@@ -96,11 +96,11 @@ async def remove(ctx, *role_inputs):
             try:
                 role = get(ctx.guild.roles, name=role_input)
                 await user.remove_roles(role)
-                await ctx.send(f'✅ Removed {role_input} from {user}')
-                await logchannel.send(f'✅ Removed {role_input} from {user}')
+                await ctx.send(f"✅ Removed {role_input} from {user}")
+                await logchannel.send(f"✅ Removed {role_input} from {user}")
             except:
-                await ctx.send(f'❌ Failed to remove {role_input} from {user}. Please make sure your course code matches exactly e.g. `COMP1511` not `COMP 1511`')
-                await logchannel.send(f'❌ Failed to remove {role_input} from {user}')
+                await ctx.send(f"❌ Failed to remove {role_input} from {user}. Please make sure your course code matches exactly e.g. `COMP1511` not `COMP 1511`")
+                await logchannel.send(f"❌ Failed to remove {role_input} from {user}")
                 success = False
         if success:
             await ctx.message.add_reaction("👍")
@@ -173,4 +173,4 @@ async def on_raw_reaction_remove(payload):
     await process_reaction(payload, "remove")
 
 
-client.run(os.environ['DISCORD_BOT_TOKEN'])
+client.run(os.environ["DISCORD_BOT_TOKEN"])
