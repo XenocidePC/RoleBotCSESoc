@@ -105,4 +105,39 @@ async def remove(ctx, *role_inputs):
             await ctx.message.add_reaction("👍")
 
 
+@client.command()
+@commands.has_permissions(administrator=True)
+async def reactionrole(ctx, *role_inputs):
+    embed = discord.Embed(title="Role Menu", description="React to give yourself a role")
+    embed.add_field(name="COMP Level 1", value="```"
+                                                "0️⃣ COMP1511\n"
+                                                "1️⃣ COMP1521\n"
+                                                "2️⃣ COMP1531"
+                                                "```")
+    embed.add_field(name="COMP Level 2", value="```"
+                                                "3️⃣ COMP2041\n"
+                                                "4️⃣ COMP2511\n"
+                                                "5️⃣ COMP2521"
+                                                "```")
+    embed.add_field(name="MATH Level 1", value="```"
+                                                "6️⃣ MATH1081\n"
+                                                "7️⃣ MATH1131\n"
+                                                "8️⃣ MATH1141\n"
+                                                "9️⃣ MATH1231\n"
+                                                "🔟 MATH1241\n"
+                                                "```")
+    rolemenu = await ctx.send(embed=embed)
+    await rolemenu.add_reaction("0️⃣")
+    await rolemenu.add_reaction("1️⃣")
+    await rolemenu.add_reaction("2️⃣")
+    await rolemenu.add_reaction("3️⃣")
+    await rolemenu.add_reaction("4️⃣")
+    await rolemenu.add_reaction("5️⃣")
+    await rolemenu.add_reaction("6️⃣")
+    await rolemenu.add_reaction("7️⃣")
+    await rolemenu.add_reaction("8️⃣")
+    await rolemenu.add_reaction("9️⃣")
+    await rolemenu.add_reaction("🔟")
+
+
 client.run(os.environ['DISCORD_BOT_TOKEN'])
