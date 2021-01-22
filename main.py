@@ -3,6 +3,7 @@ import time
 import discord
 from discord.ext import commands
 from discord.utils import get
+from config.reaction_roles import reaction_roles
 
 intents = discord.Intents.default()
 intents.members = True
@@ -142,25 +143,20 @@ async def reactionrole(ctx, *role_inputs):
 
 
 async def process_reaction(payload, action):
-    guild = client.get_guild(payload.guild_id)
-    user = await guild.fetch_member(payload.user_id)
-    if not user.bot:
-        if payload.emoji.name == "0️⃣":
-            role_name = "COMP1511"
-        elif payload.emoji.name == "1️⃣":
-            role_name = "COMP1521"
-        elif payload.emoji.name == "5️⃣":
-            role_name = "COMP2521"
-        role = get(user.guild.roles, name=role_name)
-
-        if role is None:
-            pass # Warning
-        elif action == "add":
-            await user.add_roles(role)
-        elif action == "remove":
-            await user.remove_roles(role)
-        else:
-            pass # Warning
+    if payload.message_id in reaction_roles.keys():
+        for item in reaction_roles[payload.message_id]:
+            if item[0] == payload.emoji.name:
+                guild = client.get_guild(payload.guild_id)
+                user = await guild.fetch_member(payload.user_id)
+                role = guild.get_role(item[1])
+                if role is None:
+                    print(f"Invalid role ({item[0]}, {item[1]}) provided in reaction_roles.py"
+                          f"for message with ID: {payload.message_id}")
+                elif action == "add":
+                    await user.add_roles(role)
+                elif action == "remove":
+                    await user.remove_roles(role)
+                break
 
 
 @client.event
