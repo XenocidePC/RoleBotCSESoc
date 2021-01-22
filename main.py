@@ -106,7 +106,7 @@ async def remove(ctx, *role_inputs):
         if success:
             await ctx.message.add_reaction("👍")
 
-
+# Send embed message with role list and reactions
 @client.command()
 @commands.has_permissions(administrator=True)
 async def reactionrole(ctx, *role_inputs):
@@ -141,7 +141,7 @@ async def reactionrole(ctx, *role_inputs):
     await rolemenu.add_reaction("9️⃣")
     await rolemenu.add_reaction("🔟")
 
-
+# Gives the user a role
 async def process_reaction(payload, action):
     if payload.message_id in reaction_roles.keys():
         for item in reaction_roles[payload.message_id]:
@@ -158,12 +158,12 @@ async def process_reaction(payload, action):
                     await user.remove_roles(role)
                 break
 
-
+# Listens for emote addition
 @client.event
 async def on_raw_reaction_add(payload):
     await process_reaction(payload, "add")
 
-
+# Listens for emote removal
 @client.event
 async def on_raw_reaction_remove(payload):
     await process_reaction(payload, "remove")
