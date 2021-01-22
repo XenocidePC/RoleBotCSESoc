@@ -4,8 +4,9 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 
-
-client = commands.Bot(command_prefix="!")
+intents = discord.Intents.default()
+intents.members = True
+client = commands.Bot(command_prefix="!", intents=intents)
 ROLE_CHANNEL_ID = 0
 ROLELOG_CHANNEL_ID = 0
 
@@ -138,6 +139,40 @@ async def reactionrole(ctx, *role_inputs):
     await rolemenu.add_reaction("8️⃣")
     await rolemenu.add_reaction("9️⃣")
     await rolemenu.add_reaction("🔟")
+
+
+@client.event
+async def on_raw_reaction_add(payload):
+    guild = client.get_guild(payload.guild_id)
+    user = await guild.fetch_member(payload.user_id)
+    if user.bot:
+        return
+    else:
+        if payload.emoji.name == "0️⃣":
+            role_name = "COMP1511"
+        elif payload.emoji.name == "1️⃣":
+            role_name = "COMP1521"
+        elif payload.emoji.name == "5️⃣":
+            role_name = "COMP2521"
+        role = get(user.guild.roles, name=role_name)
+        await user.add_roles(role)
+
+
+@client.event
+async def on_raw_reaction_remove(payload):
+    guild = client.get_guild(payload.guild_id)
+    user = await guild.fetch_member(payload.user_id)
+    if user.bot:
+        return
+    else:
+        if payload.emoji.name == "0️⃣":
+            role_name = "COMP1511"
+        elif payload.emoji.name == "1️⃣":
+            role_name = "COMP1521"
+        elif payload.emoji.name == "5️⃣":
+            role_name = "COMP2521"
+        role = get(user.guild.roles, name=role_name)
+        await user.remove_roles(role)
 
 
 client.run(os.environ['DISCORD_BOT_TOKEN'])
