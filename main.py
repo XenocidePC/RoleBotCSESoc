@@ -125,7 +125,7 @@ async def reactionrole(ctx, *role_inputs):
                                                 "7️⃣ MATH1131\n"
                                                 "8️⃣ MATH1141\n"
                                                 "9️⃣ MATH1231\n"
-                                                "🔟 MATH1241\n"
+                                                "🔟 MATH1241"
                                                 "```")
     rolemenu = await ctx.send(embed=embed)
     await rolemenu.add_reaction("0️⃣")
@@ -141,13 +141,10 @@ async def reactionrole(ctx, *role_inputs):
     await rolemenu.add_reaction("🔟")
 
 
-@client.event
-async def on_raw_reaction_add(payload):
+async def process_reaction(payload, action):
     guild = client.get_guild(payload.guild_id)
     user = await guild.fetch_member(payload.user_id)
-    if user.bot:
-        return
-    else:
+    if not user.bot:
         if payload.emoji.name == "0️⃣":
             role_name = "COMP1511"
         elif payload.emoji.name == "1️⃣":
@@ -155,24 +152,25 @@ async def on_raw_reaction_add(payload):
         elif payload.emoji.name == "5️⃣":
             role_name = "COMP2521"
         role = get(user.guild.roles, name=role_name)
-        await user.add_roles(role)
+
+        if role is None:
+            pass # Warning
+        elif action == "add":
+            await user.add_roles(role)
+        elif action == "remove":
+            await user.remove_roles(role)
+        else:
+            pass # Warning
+
+
+@client.event
+async def on_raw_reaction_add(payload):
+    await process_reaction(payload, "add")
 
 
 @client.event
 async def on_raw_reaction_remove(payload):
-    guild = client.get_guild(payload.guild_id)
-    user = await guild.fetch_member(payload.user_id)
-    if user.bot:
-        return
-    else:
-        if payload.emoji.name == "0️⃣":
-            role_name = "COMP1511"
-        elif payload.emoji.name == "1️⃣":
-            role_name = "COMP1521"
-        elif payload.emoji.name == "5️⃣":
-            role_name = "COMP2521"
-        role = get(user.guild.roles, name=role_name)
-        await user.remove_roles(role)
+    await process_reaction(payload, "remove")
 
 
 client.run(os.environ['DISCORD_BOT_TOKEN'])
