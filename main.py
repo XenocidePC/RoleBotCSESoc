@@ -3,6 +3,7 @@ import time
 import discord
 from discord.ext import commands
 from discord.utils import get
+from config.role_menu import role_menu
 from config.reaction_roles import reaction_roles
 
 intents = discord.Intents.default()
@@ -109,37 +110,22 @@ async def remove(ctx, *role_inputs):
 # Send embed message with role list and reactions
 @client.command()
 @commands.has_permissions(administrator=True)
-async def reactionrole(ctx, *role_inputs):
-    embed = discord.Embed(title="Role Menu", description="React to give yourself a role")
-    embed.add_field(name="COMP Level 1", value="```"
-                                                "0️⃣ COMP1511\n"
-                                                "1️⃣ COMP1521\n"
-                                                "2️⃣ COMP1531"
-                                                "```")
-    embed.add_field(name="COMP Level 2", value="```"
-                                                "3️⃣ COMP2041\n"
-                                                "4️⃣ COMP2511\n"
-                                                "5️⃣ COMP2521"
-                                                "```")
-    embed.add_field(name="MATH Level 1", value="```"
-                                                "6️⃣ MATH1081\n"
-                                                "7️⃣ MATH1131\n"
-                                                "8️⃣ MATH1141\n"
-                                                "9️⃣ MATH1231\n"
-                                                "🔟 MATH1241"
-                                                "```")
-    rolemenu = await ctx.send(embed=embed)
-    await rolemenu.add_reaction("0️⃣")
-    await rolemenu.add_reaction("1️⃣")
-    await rolemenu.add_reaction("2️⃣")
-    await rolemenu.add_reaction("3️⃣")
-    await rolemenu.add_reaction("4️⃣")
-    await rolemenu.add_reaction("5️⃣")
-    await rolemenu.add_reaction("6️⃣")
-    await rolemenu.add_reaction("7️⃣")
-    await rolemenu.add_reaction("8️⃣")
-    await rolemenu.add_reaction("9️⃣")
-    await rolemenu.add_reaction("🔟")
+async def reactionroles(ctx, *menu_ids):
+    for menu_id in menu_ids:
+        if menu_id in role_menu.keys():
+            embed = discord.Embed(title=role_menu[menu_id]["title"], description=role_menu[menu_id]["description"])
+            emojilist = []
+            for submenu in role_menu[menu_id]["content"]:
+                rolestring = "```"
+                for item in role_menu[menu_id]["content"][submenu]:
+                    emojilist.append(item[0])
+                    rolestring += item[0] + " " + item[1] + "\n"
+                rolestring += "```"
+                embed.add_field(name=submenu, value=rolestring)
+            rolemenu = await ctx.send(embed=embed)
+            for emoji in emojilist:
+                await rolemenu.add_reaction(emoji)
+
 
 # Gives the user a role
 async def process_reaction(payload, action):
