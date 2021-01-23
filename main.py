@@ -84,7 +84,7 @@ async def give(ctx, *role_inputs):
             await ctx.message.add_reaction("👍")
 
 
-# Take away user"s role.
+# Take away user's role.
 @client.command()
 async def remove(ctx, *role_inputs):
     global ROLELOG_CHANNEL_ID
