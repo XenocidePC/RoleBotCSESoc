@@ -22,7 +22,7 @@ role_menu = {
             "COMP Level 2": [
                 ("3️⃣", "COMP2041"),
                 ("4️⃣", "COMP2511"),
-                ("5️⃣", "COMP2521"),
+                ("5️⃣", "COMP2521")
             ],
             "MATH Level 1": [
                 ("6️⃣", "MATH1081"),
