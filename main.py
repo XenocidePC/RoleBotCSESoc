@@ -114,16 +114,19 @@ async def reactionroles(ctx, *menu_ids):
     for menu_id in menu_ids:
         if menu_id in role_menu.keys():
             embed = discord.Embed(title=role_menu[menu_id]["title"], description=role_menu[menu_id]["description"])
-            emojilist = []
+            rrlist = []
             for submenu in role_menu[menu_id]["content"]:
                 rolestring = "```"
                 for item in role_menu[menu_id]["content"][submenu]:
-                    emojilist.append(item[0])
+                    role = get(ctx.guild.roles, name=item[1])
+                    rrlist.append((item[0], role.id))
                     rolestring += item[0] + " " + item[1] + "\n"
                 rolestring += "```"
                 embed.add_field(name=submenu, value=rolestring)
             rolemenu = await ctx.send(embed=embed)
-            for emoji in emojilist:
+            reaction_roles[rolemenu.id] = rrlist
+            # TODO: Write updated dict to file ^
+            for (emoji, _) in rrlist:
                 await rolemenu.add_reaction(emoji)
 
 
